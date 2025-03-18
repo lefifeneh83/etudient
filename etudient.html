@@ -1,0 +1,64 @@
+etudient
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معلومات الطلبة</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>معلومات الطلبة</h1>
+        <form action="submit.php" method="POST" enctype="multipart/form-data">
+            <label for="name">الاسم:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="surname">اللقب:</label>
+            <input type="text" id="surname" name="surname" required>
+
+            <label for="dob">تاريخ الميلاد:</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="birthplace">مكان الميلاد:</label>
+            <input type="text" id="birthplace" name="birthplace" required>
+
+            <label for="level">المستوى الجامعي:</label>
+            <select id="level" name="level" required>
+                <option value="بكالوريا">بكالوريا</option>
+                <option value="ماجستير">ماجستير</option>
+                <option value="دكتوراه">دكتوراه</option>
+            </select>
+
+            <label for="phone">رقم الهاتف:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <button type="submit">إرسال</button>
+        </form>
+    </div>
+
+    <script>
+        // تخزين البيانات محليًا باستخدام JavaScript
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault(); // منع الإرسال الافتراضي للنموذج
+    
+            const studentData = {
+                name: document.getElementById('name').value,
+                surname: document.getElementById('surname').value,
+                dob: document.getElementById('dob').value,
+                birthplace: document.getElementById('birthplace').value,
+                level: document.getElementById('level').value,
+                phone: document.getElementById('phone').value,
+            };
+    
+            // استرجاع البيانات المخزنة سابقًا
+            let students = JSON.parse(localStorage.getItem('students')) || [];
+            // إضافة الطالب الجديد إلى المصفوفة
+            students.push(studentData);
+            // تخزين المصفوفة في Local Storage
+            localStorage.setItem('students', JSON.stringify(students));
+            alert('تم تخزين المعلومات محليًا!');
+        });
+    </script>
+</body>
+</html>

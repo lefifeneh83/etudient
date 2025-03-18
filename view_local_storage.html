@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض معلومات الطلبة</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>معلومات الطلبة المخزنة محليًا</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>اللقب</th>
+                    <th>تاريخ الميلاد</th>
+                    <th>مكان الميلاد</th>
+                    <th>المستوى الجامعي</th>
+                    <th>رقم الهاتف</th>
+                </tr>
+            </thead>
+            <tbody id="student-info"></tbody>
+        </table>
+        <button id="print-btn">طباعة المعلومات</button>
+        <button id="share-btn">مشاركة عبر البريد الإلكتروني</button>
+    </div>
+
+    <script>
+        // استرجاع البيانات من Local Storage
+        const storedData = localStorage.getItem('students');
+        const studentInfoDiv = document.getElementById('student-info');
+
+        if (storedData) {
+            const students = JSON.parse(storedData);
+            // عرض المعلومات في جدول
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.surname}</td>
+                    <td>${student.dob}</td>
+                    <td>${student.birthplace}</td>
+                    <td>${student.level}</td>
+                    <td>${student.phone}</td>
+                `;
+                studentInfoDiv.appendChild(row);
+            });
+        } else {
+            studentInfoDiv.innerHTML = "<tr><td colspan='6'>لا توجد معلومات مخزنة.</td></tr>";
+        }
+
+        // وظيفة الطباعة
+        document.getElementById('print-btn').addEventListener('click', function() {
+            window.print();
+        });
+
+        // وظيفة المشاركة عبر البريد الإلكتروني
+        document.getElementById('share-btn').addEventListener('click', function() {
+            const subject = "معلومات الطلبة";
+            const body = Array.from(JSON.parse(storedData)).map(student => `
+                الاسم: ${student.name}
+                اللقب: ${student.surname}
+                تاريخ الميلاد: ${student.dob}
+                مكان الميلاد: ${student.birthplace}
+                المستوى الجامعي: ${student.level}
+                رقم الهاتف: ${student.phone}
+            `).join('\n');
+            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        });
+    </script>
+</body>
+</html>
